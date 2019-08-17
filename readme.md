@@ -6,6 +6,8 @@ Vueで複数のコンポーネントで同じ値を参照したい場合、「th
 しかし、そのライブラリを入れるほどでもない小さい実装の場合、状態管理を自前で用意した方が良い場合がある、その際に参考になるstoreパターンを実装する  
 
 ## DEMO
+* https://yuki-sakaguchi.github.io/vue-store/part01/
+* https://yuki-sakaguchi.github.io/vue-store/part02/
 
 ## 参考
 https://jp.vuejs.org/v2/guide/state-management.html  
