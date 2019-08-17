@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+      .box {
+        padding: 10px;
+        border: 1px solid black;
+      }
+      .box + .box {
+        margin-top: 10px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <title>Storeパターン part02</title>
+  </head>
+  <body>
+    <h1>Storeパターンで実装してみる（Vue.component）</h1>
+    <p>ここに表示されているvueコンポーネントは全て<strong>同じstoreを参照</strong>しています</p>
+
+    <div id="app">
+      <In-out></In-out>
+      <Count></Count>
+    </div>
+
+    <script>
+      const store = {
+        state: {
+          message: 'Hello!'
+        },
+        setMessageAction (newValue) {
+          this.state.message = newValue
+        },
+        clearMessageAction () {
+          this.state.message = ''
+        }
+      }
+
+      /**
+       * 文字を表示したり、変更したりするコンポーネント
+       *    本来なら「v-model」などで値を変更する箇所も関数を用意してそれを使うようにしている。
+       *    modelを使っちゃうと直接storeを書き換えることになるのでルールから外れてしまうため
+       */
+      Vue.component('in-out', {
+        template: `
+          <div class="box">
+            <h2>文字列を表示、入力、削除するコンポーネント</h2>
+            <p>{{ sharedState.message }}</p>
+            <p v-if="!sharedState.message">値がありません。</p>
+            <input type="input" :value="sharedState.message" @input="setMessageAction">
+            <button @click="clearMessageAction">CLEAR</button>
+          </div>
+        `,
+        data () {
+          return {
+            sharedState: store.state,
+          }
+        },
+        methods: {
+          setMessageAction (e) {
+            store.setMessageAction(e.target.value)
+          },
+          clearMessageAction () {
+            store.clearMessageAction()
+          }
+        }
+      })
+
+      /**
+       * 文字数を表示するコンポーネント
+       */
+      Vue.component('count', {
+        template: `
+          <div class="box">
+            <h2>文字をカウントするコンポーネント</h2>
+            <p>文字数:{{ sharedState.message.length }}</p>
+          </div>
+        `,
+        data () {
+          return {
+            sharedState: store.state,
+          }
+        }
+      })
+
+      /**
+       * 文字を表示したり、変更したりするコンポーネント
+       *    本来なら「v-model」などで値を変更する箇所も関数を用意してそれを使うようにしている。
+       *    modelを使っちゃうと直接storeを書き換えることになるのでルールから外れてしまうため
+       */
+      const vmA = new Vue({
+        el: '#app',
+      })
+    </script>
+  </body>
+</html>
