@@ -50,4 +50,34 @@ var store = {
 ```
 
 こんな感じでstore自体に自分を変更する用の関数を用意して、これを用いて値を変更する。  
-それ以外の変更はしないルールを守ることでstoreの変更が一定のルールのみになり、バグが含まれづらくなる
+それ以外の変更はしないルールを守ることでstoreの変更が一定のルールのみになり、バグが含まれづらくなる  
+  
+単一方向を実践するために「action」→「store」→「view」→「action」...とする。  
+  
+```
+new Vue({
+  el: '#app',
+  
+  // store
+  data () {
+    return {
+      count: 0,
+    }
+  },
+
+  // view
+  template: `
+    <div>
+      {{ count }}
+      <input type="button" value="countUp" v-on:click="increment">
+    </div>
+  `,
+
+  // action
+  methods: {
+    increment () {
+      this.count++
+    }
+  }
+})
+```
